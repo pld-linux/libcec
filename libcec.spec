@@ -6,7 +6,7 @@ Release:	1
 License:	GPL v2+
 Group:		Libraries
 URL:		http://libcec.pulse-eight.com/
-Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%version.tar.gz
+Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
 # Source0-md5:	0317e6b8895d54f8f035fde90b25dc2d
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
