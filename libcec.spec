@@ -1,3 +1,6 @@
+# TODO (for arm):
+# - --enable-tda995x (needs nxp_hdmi SDK)
+# - --enable-rpi (needs Raspberry Pi SDK)
 #
 # Conditional build:
 %bcond_without	static_libs	# static library build
@@ -5,12 +8,12 @@
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
-Version:	2.1.1
+Version:	2.1.3
 Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
-# Source0-md5:	0317e6b8895d54f8f035fde90b25dc2d
+# Source0-md5:	ee2f2c71516cea30ac992ddbe8f7ed1c
 URL:		http://libcec.pulse-eight.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.11
