@@ -8,12 +8,12 @@
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
-Version:	2.1.3
+Version:	2.1.4
 Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
-# Source0-md5:	ee2f2c71516cea30ac992ddbe8f7ed1c
+# Source0-md5:	23bbce4295fe5aa2842177cde9cb8688
 URL:		http://libcec.pulse-eight.com/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake >= 1:1.11
