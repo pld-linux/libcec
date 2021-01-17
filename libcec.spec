@@ -96,6 +96,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# Remove versioned binaries
+rm $RPM_BUILD_ROOT/%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+mv $RPM_BUILD_ROOT/%{_bindir}/cec-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cec-client
+mv $RPM_BUILD_ROOT/%{_bindir}/cecc-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -111,8 +116,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files utils
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cec-client*
-%attr(755,root,root) %{_bindir}/cecc-client*
+%attr(755,root,root) %{_bindir}/cec-client
+%attr(755,root,root) %{_bindir}/cecc-client
 
 %files devel
 %defattr(644,root,root,755)
