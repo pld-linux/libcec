@@ -1,27 +1,31 @@
 # TODO (for arm):
 # - --enable-tda995x (needs nxp_hdmi SDK)
 # - --enable-rpi (needs Raspberry Pi SDK)
+# - package python module
 #
 # Conditional build:
-%bcond_without	static_libs	# static library build
+%bcond_with	static_libs	# static library build
 #
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
-Version:	2.1.4
-Release:	2
+Version:	6.0.2
+Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
-# Source0-md5:	23bbce4295fe5aa2842177cde9cb8688
+# Source0-md5:	977e7f56279a85b52d4a2d08addb233e
 URL:		http://libcec.pulse-eight.com/
-BuildRequires:	autoconf >= 2.59
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	cmake
 BuildRequires:	libstdc++-devel >= 6:4.2
-BuildRequires:	libtool
 BuildRequires:	lockdev-devel >= 1.0
-BuildRequires:	pkgconfig
+BuildRequires:	ncurses-devel
+BuildRequires:	platform-devel
+BuildRequires:	python3-devel
+BuildRequires:	swig
+BuildRequires:	systemd-devel
 BuildRequires:	udev-devel >= 1:151
+BuildRequires:	xorg-lib-libXrandr-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -78,23 +82,19 @@ Statyczna biblioteka libcec.
 %setup -q -n %{name}-%{name}-%{version}
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--disable-silent-rules \
-	%{!?with_static_libs:--disable-static}
+install -d build
+cd build
+%cmake \
+	-DHAVE_LINUX_API=on \
+	..
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__make} -C build install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,13 +105,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 # COPYING contains also general notes
-%doc AUTHORS COPYING ChangeLog README
+%doc AUTHORS COPYING ChangeLog README.md
 %attr(755,root,root) %{_libdir}/libcec.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libcec.so.2
+%attr(755,root,root) %ghost %{_libdir}/libcec.so.6
 
 %files utils
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/cec-client
+%attr(755,root,root) %{_bindir}/cec-client*
+%attr(755,root,root) %{_bindir}/cecc-client*
 
 %files devel
 %defattr(644,root,root,755)
