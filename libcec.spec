@@ -10,7 +10,7 @@ Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
 Version:	6.0.2
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Libraries
 Source0:	http://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
@@ -20,7 +20,7 @@ BuildRequires:	cmake
 BuildRequires:	libstdc++-devel >= 6:4.2
 BuildRequires:	lockdev-devel >= 1.0
 BuildRequires:	ncurses-devel
-BuildRequires:	platform-devel
+BuildRequires:	p8-platform-devel
 BuildRequires:	python3-devel
 BuildRequires:	swig
 BuildRequires:	systemd-devel
@@ -97,9 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 # Remove versioned binaries
-rm $RPM_BUILD_ROOT/%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
-mv $RPM_BUILD_ROOT/%{_bindir}/cec-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cec-client
-mv $RPM_BUILD_ROOT/%{_bindir}/cecc-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+rm $RPM_BUILD_ROOT%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+mv $RPM_BUILD_ROOT%{_bindir}/cec-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cec-client
+mv $RPM_BUILD_ROOT%{_bindir}/cecc-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cecc-client
 
 %clean
 rm -rf $RPM_BUILD_ROOT
