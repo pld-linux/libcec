@@ -22,14 +22,15 @@ BuildRequires:	libstdc++-devel >= 6:4.2
 BuildRequires:	lockdev-devel >= 1.0
 BuildRequires:	ncurses-devel
 BuildRequires:	p8-platform-devel
+BuildRequires:	rpmbuild(macros) >= 1.605
+BuildRequires:	systemd-devel
+BuildRequires:	udev-devel >= 1:151
+BuildRequires:	xorg-lib-libXrandr-devel
 %if %{with python}
 BuildRequires:	python3-devel
 BuildRequires:	swig
 BuildRequires:	swig-python
 %endif
-BuildRequires:	systemd-devel
-BuildRequires:	udev-devel >= 1:151
-BuildRequires:	xorg-lib-libXrandr-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
