@@ -4,6 +4,7 @@
 # - package python module
 #
 # Conditional build:
+%bcond_with	python		# python module
 %bcond_with	static_libs	# static library build
 #
 Summary:	Pulse-Eight CEC adapter control library
@@ -21,8 +22,11 @@ BuildRequires:	libstdc++-devel >= 6:4.2
 BuildRequires:	lockdev-devel >= 1.0
 BuildRequires:	ncurses-devel
 BuildRequires:	p8-platform-devel
+%if %{with python}
 BuildRequires:	python3-devel
 BuildRequires:	swig
+BuildRequires:	swig-python
+%endif
 BuildRequires:	systemd-devel
 BuildRequires:	udev-devel >= 1:151
 BuildRequires:	xorg-lib-libXrandr-devel
@@ -86,6 +90,7 @@ install -d build
 cd build
 %cmake \
 	-DHAVE_LINUX_API=on \
+	%{!?with_python:-DSKIP_PYTHON_WRAPPER:BOOL=ON} \
 	..
 
 %{__make}
