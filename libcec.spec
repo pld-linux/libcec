@@ -17,7 +17,7 @@ Group:		Libraries
 Source0:	https://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
 # Source0-md5:	977e7f56279a85b52d4a2d08addb233e
 URL:		http://libcec.pulse-eight.com/
-BuildRequires:	cmake
+BuildRequires:	cmake >= 3.12.0
 BuildRequires:	libstdc++-devel >= 6:4.2
 BuildRequires:	lockdev-devel >= 1.0
 BuildRequires:	ncurses-devel
