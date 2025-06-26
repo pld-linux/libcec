@@ -1,11 +1,10 @@
 # TODO (for arm):
 # - --enable-tda995x (needs nxp_hdmi SDK)
 # - --enable-rpi (needs Raspberry Pi SDK)
-# - package python module
 #
 # Conditional build:
-%bcond_with	python		# python module
-%bcond_with	static_libs	# static library build
+%bcond_without	python		# python module
+%bcond_without	static_libs	# static library
 #
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
@@ -14,22 +13,22 @@ Version:	7.1.1
 Release:	1
 License:	GPL v2+
 Group:		Libraries
+#Source0Download: https://github.com/Pulse-Eight/libcec/releases
 Source0:	https://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
 # Source0-md5:	ca1d86e584a29d1506da69e9806c8c27
 URL:		http://libcec.pulse-eight.com/
 BuildRequires:	cmake >= 3.12.0
-BuildRequires:	libstdc++-devel >= 6:4.2
-BuildRequires:	lockdev-devel >= 1.0
+BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	ncurses-devel
-BuildRequires:	p8-platform-devel
+BuildRequires:	p8-platform-devel >= 2.0
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	systemd-devel
 BuildRequires:	udev-devel >= 1:151
 BuildRequires:	xorg-lib-libXrandr-devel
 %if %{with python}
-BuildRequires:	python3-devel
-BuildRequires:	swig
-BuildRequires:	swig-python
+BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	swig >= 2
+BuildRequires:	swig-python >= 2
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -62,8 +61,8 @@ Summary:	Header files for libcec library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libcec
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libstdc++-devel >= 6:4.2
-Requires:	udev-devel >= 1:151
+Requires:	libstdc++-devel >= 6:4.7
+Requires:	p8-platform-devel >= 2.0
 
 %description devel
 Header files for libcec library.
@@ -83,6 +82,18 @@ Static libcec library.
 %description static -l pl.UTF-8
 Statyczna biblioteka libcec.
 
+%package -n python3-libcec
+Summary:	Python wrapper for libcec library
+Summary(pl.UTF-8):	Obudowanie Pythonowe dla biblioteki libcec
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+
+%description -n python3-libcec
+Python wrapper for libcec library.
+
+%description -n python3-libcec -l pl.UTF-8
+Obudowanie Pythonowe dla biblioteki libcec.
+
 %prep
 %setup -q -n %{name}-%{name}-%{version}
 
@@ -90,7 +101,9 @@ Statyczna biblioteka libcec.
 install -d build
 cd build
 %cmake \
+	-DCMAKE_INSTALL_LIBDIR:PATH=%{_lib} \
 	-DHAVE_LINUX_API=on \
+	-DPYTHON_USE_VERSION=3 \
 	%{!?with_python:-DSKIP_PYTHON_WRAPPER:BOOL=ON} \
 	..
 
@@ -102,10 +115,17 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -Dp debian/cec-client.1 $RPM_BUILD_ROOT%{_mandir}/man1/cec-client.1
+
 # Remove versioned binaries
-rm $RPM_BUILD_ROOT%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
-mv $RPM_BUILD_ROOT%{_bindir}/cec-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cec-client
-mv $RPM_BUILD_ROOT%{_bindir}/cecc-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/cec-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cec-client
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/cecc-client-%{version} $RPM_BUILD_ROOT/%{_bindir}/cecc-client
+
+%if %{with python}
+%py3_comp $RPM_BUILD_ROOT%{py3_sitedir}
+%py3_ocomp $RPM_BUILD_ROOT%{py3_sitedir}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -116,7 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 # LICENSE.md contains also general notes
-%doc AUTHORS ChangeLog LICENSE.md README.md
+%doc AUTHORS LICENSE.md README.md debian/changelog.in
 %attr(755,root,root) %{_libdir}/libcec.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libcec.so.7
 
@@ -124,6 +144,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cec-client
 %attr(755,root,root) %{_bindir}/cecc-client
+%{_mandir}/man1/cec-client.1*
 
 %files devel
 %defattr(644,root,root,755)
@@ -135,4 +156,13 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libcec.a
+%endif
+
+%if %{with python}
+%files -n python3-libcec
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/pyCecClient
+%attr(755,root,root) %{py3_sitedir}/_pycec.so
+%{py3_sitedir}/cec.py
+%{py3_sitedir}/__pycache__/cec.cpython-*.py[co]
 %endif
