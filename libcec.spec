@@ -9,18 +9,17 @@
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
-Version:	7.1.1
-Release:	2
+Version:	8.1.1
+Release:	1
 License:	GPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/Pulse-Eight/libcec/releases
 Source0:	https://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
-# Source0-md5:	ca1d86e584a29d1506da69e9806c8c27
+# Source0-md5:	a84ef0f3e8557a7a4ca5fa33fdd07cb2
 URL:		http://libcec.pulse-eight.com/
 BuildRequires:	cmake >= 3.12.0
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	ncurses-devel
-BuildRequires:	p8-platform-devel >= 2.0
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	systemd-devel
 BuildRequires:	udev-devel >= 1:151
@@ -62,7 +61,6 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libcec
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libstdc++-devel >= 6:4.7
-Requires:	p8-platform-devel >= 2.0
 
 %description devel
 Header files for libcec library.
@@ -105,6 +103,7 @@ cd build
 	-DHAVE_LINUX_API=on \
 	-DPYTHON_USE_VERSION=3 \
 	%{!?with_python:-DSKIP_PYTHON_WRAPPER:BOOL=ON} \
+	%{!?with_static_libs:-DDISABLE_STATIC:BOOL=ON} \
 	..
 
 %{__make}
@@ -138,7 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 # LICENSE.md contains also general notes
 %doc AUTHORS LICENSE.md README.md debian/changelog.in
 %attr(755,root,root) %{_libdir}/libcec.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libcec.so.7
+%attr(755,root,root) %ghost %{_libdir}/libcec.so.8
 
 %files utils
 %defattr(644,root,root,755)
@@ -151,6 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcec.so
 %{_pkgconfigdir}/libcec.pc
 %{_includedir}/libcec
+%{_libdir}/cmake/libcec
 
 %if %{with static_libs}
 %files static
