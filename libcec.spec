@@ -9,13 +9,13 @@
 Summary:	Pulse-Eight CEC adapter control library
 Summary(pl.UTF-8):	Biblioteka sterowania adapterem CEC Pulse-Eight
 Name:		libcec
-Version:	8.1.6
+Version:	8.1.7
 Release:	1
 License:	GPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/Pulse-Eight/libcec/releases
 Source0:	https://github.com/Pulse-Eight/libcec/archive/%{name}-%{version}.tar.gz
-# Source0-md5:	eb458dcef5cc3dcf6067f9cdee4bb387
+# Source0-md5:	5120c4cb9087438d65ece2ad13ebec3d
 URL:		http://libcec.pulse-eight.com/
 BuildRequires:	cmake >= 3.12.0
 BuildRequires:	libstdc++-devel >= 6:4.7
@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -Dp debian/cec-client.1 $RPM_BUILD_ROOT%{_mandir}/man1/cec-client.1
+install -Dp debian/man/cec-client.1 $RPM_BUILD_ROOT%{_mandir}/man1/cec-client.1
 
 # Remove versioned binaries
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/cec-client $RPM_BUILD_ROOT/%{_bindir}/cecc-client
